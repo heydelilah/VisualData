@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas 飞线</title>
+</head>
+
+<style>
+	body{
+		background-color: #040b4f;
+	}
+
+	#flyline{
+		width: 900px;
+		height: 900px;
+		border: 1px solid #eee;
+	}
+</style>
+
+<body>
+
+	<!-- 目标容器 -->
+	<div id="flyline"></div>
+
+
+	<script src="../../../../node_modules/d3/build/d3.min.js"></script>
+	<script src="./flyline-lite.js"></script>
+
+	<script>
+
+	var data = [
+		{
+			// 起点
+			from: {x: 10, y: 400},
+			// 终点
+			to: {x: 880, y: 500}
+		},
+		{
+			from: {x: 20, y: 220},
+			to: {x: 680, y: 100}
+		}
+	];
+
+	var dom = document.getElementById('flyline');
+
+	var flylines = new Flyline(dom, {
+
+		// 飞线间隔（毫秒）
+		interval: 200,
+
+		// 飞线速度
+		speed: 10,
+
+		// 是否需要有结尾动效
+		hasEnding: true,
+
+		// 飞线样式
+		flyline: {
+			// 粗细
+			lineWidth: 2,
+			// 颜色
+			color: '#00ffe7',
+			// 弯曲程度
+			qHeight: 300
+		}
+	});
+
+	for (var i = 0; i < data.length; i++) {
+
+		// 调用飞线绘制函数
+		flylines.draw(data[i]);
+	}
+
+	</script>
+
+
+</body>
+</html>
