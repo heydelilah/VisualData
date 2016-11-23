@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>demo</title>
+</head>
+
+<script type="text/javascript" src="http://g.alicdn.com/dt/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<style type="text/css">
+
+	body{
+		padding: 0;
+		margin: 0;
+		background-color: #130027;
+		-webkit-font-smoothing: antialiased;
+	}
+	.wrapper{
+		margin: 5em;
+	}
+
+	.group{
+		position: relative;
+		/* 透视程度：数字越小，效果越明显 */
+		-webkit-perspective: 1500;
+		perspective: 1500;
+	}
+
+	.group2{
+		margin-left: 200px;
+	}
+
+		
+	.box{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100px;
+		height: 200px;
+		background: #eee;
+		opacity: 0.5;
+	}
+	.box3, .box4{
+		transform: rotateX(90deg);
+	}
+	h3{
+		color: #fff;
+		position: absolute;
+		top: -30px;
+		left: 0;
+		margin: 0;
+		width: 100px;
+		text-align: center;
+	}
+	.desc{
+		color: #fff;
+		position: absolute;
+		top: 210px;
+		left: 0;
+		width: 110px;
+		text-align: center;
+	}
+
+</style>
+<body>
+
+<div class="wrapper">
+
+	<div class="group group1">
+		<h3>Out</h3>
+		<div class="box box1"></div>
+		<div class="box box2"></div>
+
+		<div class="desc">从 0°到 -90°</div>
+	</div>
+
+	<div class="group group2">
+		<h3>In </h3>
+		<div class="box box3"></div>
+		<div class="box box4"></div>
+
+		<div class="desc">从 90°到 0°</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var degree1 = 0;
+	var degree2 = 90;
+
+	function animate(){
+		degree1++;
+		if(degree1<90){
+			// degree1 = 0;
+			$('.box2').css({
+				'transform':'rotateX(-'+degree1+'deg)'
+			});
+		}
+
+		degree2--;
+		if(degree2>0){
+			// degree2 = 90;
+			$('.box4').css({
+				'transform':'rotateX('+degree2+'deg)'
+			});
+		}
+
+		requestAnimationFrame(animate);
+	}
+
+	setTimeout(function(){
+
+		animate();
+	}, 1000);
+
+</script>
+
+</body>
+</html>

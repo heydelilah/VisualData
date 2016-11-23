@@ -1,0 +1,75 @@
+body{
+	padding: 0;
+	margin: 0;
+	background-color: #130027;
+}
+
+
+.theFlipper{
+    list-style: none;
+	-webkit-font-smoothing: antialiased;
+	font-family: sans-serif;
+	
+	/* 透视程度：数字越小，效果越明显 */
+	-webkit-perspective: 1500;
+	perspective: 1500;
+	
+	width: 400px;
+	padding: 1em;
+	overflow: hidden;
+	border: 1px solid #eee;
+}
+
+.theFlipper li{
+	float: right;
+	color: #eebe15;
+}
+.theFlipper .digit{
+	width: 2em;
+	height: 3em;
+
+	display: none; /* 初始为隐藏，因为要使得 ¥ 符号永跟随左侧 */
+	position: relative;
+}
+.theFlipper .number{
+	font-size: 3em;
+
+	position: absolute;
+	display: inline-block;
+}
+
+.theFlipper .turn-out{
+	transform: rotateX(0deg);
+	animation: turnout 0.3s 1 forwards;
+	animation-timing-function: ease-in;
+}
+
+.theFlipper .turn-in{
+	opacity: 0;
+	transform: rotateX(90deg);
+	animation: turnin 0.3s 1 forwards;
+	animation-timing-function: ease-out;
+}
+
+
+@keyframes turnout{
+	from{
+		transform: rotateX(0deg);
+		opacity: 1;
+	}
+	to{
+		transform: rotateX(-90deg);
+		opacity: 0;
+	}
+}
+
+@keyframes turnin{
+	from{
+		transform: rotateX(90deg);
+		opacity: 0;
+	}
+	to{
+		transform: rotateX(0deg);
+		opacity: 1;
+	}
+}
