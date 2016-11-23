@@ -1,0 +1,24 @@
+{
+  "name": "VisualData",
+  "version": "1.0.0",
+  "description": "Data visualization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heydelilah/VisualData.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/heydelilah/VisualData/issues"
+  },
+  "homepage": "https://github.com/heydelilah/VisualData",
+  "devDependencies": {
+    "d3": "^4.4.0",
+    "jquery": "^3.1.1",
+    "moment": "^2.17.0"
+  }
+}

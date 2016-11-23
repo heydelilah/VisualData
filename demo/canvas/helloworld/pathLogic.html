@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas path fill logic</title>
+</head>
+<body>
+	<style>
+		canvas{
+			background-color: #eee;
+			margin: 10px;
+		}
+	</style>
+	<div>
+		<divclose
+		>A -> B -> C</divclose
+		>
+		<divclose
+		>a -> b -> c</divclose
+		>
+	</div>
+	<canvas id="box1"></canvas>
+	<div>
+		<divclose
+		>A -> B -> C</divclose
+		>
+		<divclose
+		>a -> c -> b</divclose
+		>
+	</div>
+
+	<canvas id="box2"></canvas>
+
+	<script>
+		var box1 = document.getElementById('box1');
+		var ctx1 = box1.getContext('2d');
+		ctx1.beginPath();
+		ctx1.moveTo(50, 120);
+
+		ctx1.lineTo(150, 20);
+		ctx1.lineTo(270, 120);
+		ctx1.closePath();
+
+		ctx1.moveTo(105, 100);
+		ctx1.lineTo(150, 60);
+		ctx1.lineTo(205, 100);
+		ctx1.closePath();
+
+		ctx1.fillStyle = '#00cfff';
+		ctx1.fill();
+		ctx1.strokeStyle = 'blue';
+		
+		ctx1.strokeText("A(50, 120)",45, 135);
+		ctx1.strokeText("B(150, 20)",150, 19);
+		ctx1.strokeText("C(270, 120)",230, 135);
+		ctx1.strokeText("a",100, 115);
+		ctx1.strokeText("b",150, 58);
+		ctx1.strokeText("c",200, 110);
+
+
+		ctx1.stroke();
+
+		var box2 = document.getElementById('box2');
+		var ctx2 = box2.getContext('2d');
+		ctx2.beginPath();
+		ctx2.moveTo(50, 120);
+		ctx2.lineTo(150, 20);
+		ctx2.lineTo(270, 120);
+		ctx2.closePath();
+
+		ctx2.moveTo(105, 100);
+		ctx2.lineTo(205, 100);
+		ctx2.lineTo(150, 60);
+		ctx2.closePath();
+
+		ctx2.fillStyle = '#85E285';
+		ctx2.fill();
+		ctx2.strokeStyle = 'green';
+
+		ctx2.strokeText("A",45, 135);
+		ctx2.strokeText("B",150, 19);
+		ctx2.strokeText("C",270, 135);
+		ctx2.strokeText("a(105, 100)",105, 115);
+		ctx2.strokeText("b(150, 60)",150, 58);
+		ctx2.strokeText("c(205, 100)",190, 115);
+
+
+		ctx2.stroke();
+
+	</script>
+</body>
+</html>

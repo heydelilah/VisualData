@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Make shape in Canvas</title>
+</head>
+<body>
+	<style>
+		body{
+			background-color: #eee;
+		}
+		.buttons{
+			width: 600px;
+			margin: 0 auto;
+			text-align: center;
+		}
+		canvas{
+			background-color: #fff;
+			margin: 20px auto;
+			display: block;
+
+		}
+	</style>
+	<div class="buttons">
+		<button class="btn" data-id="circle">Circle</button>
+		<button class="btn" data-id="triangle">Triangle</button>
+		<button class="btn" data-id="rectangle">Rectangle</button>
+	</div>
+	<canvas width="600" height="500"></canvas>
+	
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script>
+
+	$(document).ready(function(){
+		var Shape = {
+			init: function(){
+				var dom = $('canvas').get(0);
+				var ctx = this.ctx = dom.getContext('2d');
+
+				this.width = dom.width;
+				this.height = dom.height;
+
+				this.drawCircle(ctx);
+			},
+			reDraw: function(type){
+				this.ctx.clearRect(0, 0, 600, 500);
+
+				switch(type){
+					case 'circle':
+						this.drawCircle(this.ctx);
+					break;
+					case 'triangle':
+						this.drawTriangle(this.ctx);
+					break;
+					case 'rectangle':
+						this.drawRectangle(this.ctx);
+					break;
+				}
+			},
+			drawCircle: function(ctx){
+				ctx.beginPath();
+
+				// 参数说明：arc(x,y,r,sAngle,eAngle,counterclockwise);
+				ctx.arc(this.width/2, this.height/2, 100, 0, 2* Math.PI, false);
+				ctx.fillStyle = '#8ed6ff';
+				ctx.fill();
+				ctx.lineWidth = 3;
+				ctx.strokeStyle = 'blue';
+				ctx.stroke();
+			},
+			drawTriangle: function(ctx){
+				var x = this.width/2;
+				var y = this.height/2;
+
+				ctx.beginPath();
+				ctx.moveTo(x-100, y+50);
+				ctx.lineTo(x, y-100);
+				ctx.lineTo(x+100, y+50);
+				ctx.closePath();
+				ctx.fill();
+				ctx.stroke();
+			},
+			drawRectangle: function(ctx){
+				ctx.beginPath();
+				// 参数说明：rect(x,y,width,height);
+				ctx.rect(this.width/2-100, this.height/2-50, 200,100);
+				ctx.fill();
+				ctx.stroke();
+			}
+		};
+
+		Shape.init();
+
+		// 绑定按钮事件
+		$('.btn').on('click', function(e){
+			var type = $(this).attr('data-id');
+			Shape.reDraw(type);
+		})
+	});
+
+
+	</script>
+</body>
+</html>

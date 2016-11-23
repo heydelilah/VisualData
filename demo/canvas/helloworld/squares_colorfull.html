@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Paint Rectangles</title>
+</head>
+<body>
+	<style>
+		canvas{
+			background-color: #eee;
+			margin-top: 10px;
+		}
+		#num{
+			width: 50px;
+		}
+	</style>
+
+	<h2>彩色方块</h2>
+	<p>点击画布区域，创建彩色方块</p>
+
+	<div>	
+		<span>把第</span>
+		<input type="text" id="num" placeholder="序号">
+		<span>个方块，移动到</span>
+		<input type="text" placeholder="x,y" id="pos">
+		<button id="goBtn">Go</button>
+	</div>	
+	
+	<canvas id="theCanvas" width="600" height="500"></canvas>
+
+	<script>
+
+		var canvas = document.getElementById('theCanvas');
+		var ctx = canvas.getContext('2d');
+
+		var items = [];
+		canvas.onclick = function(e){
+			var item = new Rect(e.offsetX, e.offsetY, ctx, items.length);
+			items.push(item);
+		}
+
+		function reload(){
+			this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+			for (var i = 0; i < items.length; i++) {
+				items[i].render(i);
+			};
+		}
+
+		function Rect(x, y, ctx, num){
+			this.x = x;
+			this.y = y;
+			this.ctx = ctx;
+			// 随机颜色
+			this.color = Math.floor(Math.random()*16777215).toString(16);
+			this.render(num);
+		}
+
+		Rect.prototype.render = function(num){
+			var ctx = this.ctx;
+			ctx.beginPath();
+			ctx.rect(this.x, this.y, 50, 50);
+
+
+			ctx.fillStyle = '#'+this.color;
+			ctx.fill();
+
+			ctx.fillStyle = '#'+((16777215- parseInt(this.color, 16)).toString(16));
+			ctx.textBaseline = 'middle';
+			ctx.textAlign = 'center';
+			ctx.fillText(num+1, this.x+25, this.y+25);
+		}
+		Rect.prototype.move = function(x, y){
+			this.x = +x;
+			this.y = +y;
+		}
+
+		var btn = document.getElementById('goBtn');
+		var numInput = document.getElementById('num');
+		var posInput = document.getElementById('pos');
+		btn.onclick = function(e){
+			var num = numInput.value;
+			var pos = posInput.value.split(',');
+
+			var square = items[num-1];
+			if(square){
+				square.move(pos[0], pos[1]);
+				reload();
+			}else{
+				console.log("请输入正确的序号和位置")
+			}
+
+		}
+
+	</script>
+	
+</body>
+</html>

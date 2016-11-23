@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bezier squares</title>
+</head>
+<body onload="BS.init()">
+	<style>
+		canvas{
+			background-color: #eee;
+			margin-top: 10px;
+		}
+		#num{
+			width: 50px;
+		}
+	</style>
+
+	<h2>Bezier squares</h2>
+	<p>三次贝塞尔函数</p>
+	<canvas id="canvas" width="600" height="500"></canvas>
+
+	<script>
+		// Bezier squares
+		var BS = {
+			init: function(){
+				this.canvas = document.getElementById('canvas');
+				this.ctx = canvas.getContext('2d');	
+				this.width = canvas.width;
+				this.height = canvas.height;
+
+				// 生成的方块对象集合
+				this.items = [];
+
+				this.createSquares(4);	
+				this.eventHandle();
+				this.render();		
+			},
+			createSquares: function(num){
+				for (var i = 0; i < num; i++) {
+					var x = Math.floor(Math.random() * this.width);
+					var y = Math.floor(Math.random() * this.height);
+
+					var size = 10;
+
+					var item = new Point(x, y, size, this.ctx);
+					this.items.push(item);
+				};
+			},
+			render: function(){
+				// 清除画布
+				this.ctx.clearRect(0, 0, this.width, this.height);
+
+				for (var i = 0; i < this.items.length; i++) {
+					this.items[i].render();
+				};
+
+				this.renderBezier();
+			},
+			renderBezier: function(){
+				var p = this.items;
+
+				this.ctx.beginPath();
+				this.ctx.moveTo(p[0].x, p[0].y);
+				this.ctx.bezierCurveTo(
+					p[1].x, p[1].y,
+					p[2].x, p[2].y,
+					p[3].x, p[3].y
+				);
+				this.ctx.stroke();
+			},
+			eventHandle: function(){
+				var self = this;
+				this.canvas.addEventListener('mousedown', function(e){
+					self.startDrag(e);
+				}, false);
+			},
+			startDrag: function(e){
+				var self = this;
+
+				var items = this.getSelectedItem(e.offsetX, e.offsetY);
+				if(items.length){
+					var top = items.pop();
+					top.selected = true;
+
+					this.eventMove = function(e){
+						self.dragging(top, e.offsetX, e.offsetY);
+					}
+
+					this.eventStop = function(e){
+						self.stopDrag(top);
+					}
+
+					this.canvas.addEventListener('mousemove', this.eventMove, false);
+					this.canvas.addEventListener('mouseup', this.eventStop, false);
+				}
+			},
+			dragging: function(item, x, y){
+				item.x = x - item.size/2;
+				item.y = y - item.size/2;
+				this.render();
+			},
+			stopDrag: function(item){
+				item.selected = false;
+				this.canvas.removeEventListener('mousemove', this.eventMove, false);
+				this.canvas.removeEventListener('mouseup', this.eventStop, false);
+				this.render();
+			},
+			getSelectedItem: function(x, y){
+				var result = [];
+
+				for (var i = 0; i < this.items.length; i++) {
+					var item = this.items[i];
+					var startX = item.x;
+					var endX = item.x + item.size;
+					var startY = item.y;
+					var endY = item.y + item.size;
+
+					if(x >= startX && x <= endX && y >= startY && y <= endY){
+						result.push(item);
+					}
+				};
+
+				return result;
+			}
+
+		};
+		
+		function Point(x, y, size, ctx){
+			this.x = x;
+			this.y = y;
+			this.size = size;
+			this.ctx = ctx;
+		}
+
+		Point.prototype.render = function(){
+			var ctx = this.ctx;
+			ctx.beginPath();
+			ctx.rect(this.x, this.y, this.size, this.size);
+			ctx.closePath();
+		
+			ctx.fillStyle = "#000";
+			ctx.fill();	
+		}
+
+
+	</script>
+	
+</body>
+</html>

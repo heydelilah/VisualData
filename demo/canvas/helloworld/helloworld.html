@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas</title>
+</head>
+<body>
+
+	<style>
+		canvas{
+			background-color: #ddd;
+		}
+	</style>
+	<canvas id="firstCanvas" width="900" height="900"></canvas>
+
+
+	<script>
+
+		var canvas = document.getElementById('firstCanvas');
+		var context = canvas.getContext('2d');
+		// ctx.fillText('Hello world!', 10, 20);
+		// ctx.fillRect(10,10, 30, 30);
+
+
+		// ctx.strokeStyle = "red";
+		// // ctx.beginPath();
+		// ctx.moveTo(100,100);
+		// ctx.lineTo(200,200);
+		// // ctx.rect(20,20,111,111);
+		// ctx.stroke();
+
+		context.fillStyle = "#e4e4e4";  
+	    context.fillRect(0,0,500,500);  
+	  
+	    // context.beginPath();  
+	      
+	    context.moveTo(100,100);  
+	    context.lineTo(200,100);  
+	    context.strokeStyle = "red";  
+	    // context.stroke();  
+	  
+	    // context.beginPath();  
+	    context.moveTo(100,200);  
+	    context.lineTo(200,200);  
+	    context.strokeStyle = "blue";  
+	    context.stroke(); 
+
+	</script>
+
+</body>
+</html>
