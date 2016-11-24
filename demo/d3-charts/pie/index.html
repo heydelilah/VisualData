@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>pie</title>
+</head>
+<body>
+
+	<script src="../../../node_modules/d3/build/d3.js"></script>
+
+	<style>
+		.chart{
+			border: 1px solid #eee;
+			background-color: #fafafa;
+		}
+		.chart path{
+			stroke: #eee;
+		}
+		.chart text{
+			text-anchor: middle;
+		}
+
+		.tips{
+			background-color: #fafafa;
+			border: 1px solid #eee;
+			border-radius: 5px;
+			padding: 5px 10px;
+		}
+
+	</style>
+
+	<svg class="chart"></svg>
+
+	<script>
+
+	var data = [
+		{name: '电器', value: 51},
+		{name: '运动', value: 43},
+		{name: '鞋帽', value: 10},
+		{name: '女装', value: 123}
+	];
+
+	var c = {
+		outerRadius : 150,
+		innerRadius : 0,
+		margin: {top: 30, bottom: 30, left: 30, right: 30},
+		width: 900,
+		height: 600
+	};
+
+	// 数据转换
+	var pie = d3.layout.pie()
+		.value(function(d){
+			return d.value;
+		})
+		.sort(function(a, b){
+			return b.value - a.value;
+		});
+
+	var piedata = pie(data)
+
+		console.log(piedata);
+
+	// 弧生成器
+	var arc = d3.svg.arc()
+		.innerRadius(c.innerRadius)
+		.outerRadius(c.outerRadius);
+
+	var chart = d3.select('svg')
+		.attr('width', c.width)
+		.attr('height', c.height);
+
+	var arcs = chart.selectAll('g')
+		.data(piedata)
+		.enter()
+		.append('g')
+		.attr('transform', 'translate('+(c.width/2)+','+(c.height/2)+')');
+
+	var color = d3.scale.category10();
+
+	arcs.append('path')
+		.attr('fill', function (d, i){
+			return color(i);
+		})
+		.attr('d', function (d) {
+			return arc(d);
+		})
+		.on('mouseover', function(d, i){
+			var ev = d3.event;
+
+			var coords = arc.centroid(d);
+
+			d3.select('.tips')
+				.style({
+					'opacity': 1
+				})
+				.attr('x', (c.width/2+ coords[0]*2.5) )
+				.attr('y', (c.height/2+coords[1]*2.5) )
+				.text(d.data.value)
+		})
+		.on('mouseout', function(d, i){
+			var ev = d3.event;
+
+			d3.select('.tips')
+				.style({
+					'opacity': 0
+				})
+		});
+
+	// 添加文本
+	arcs.append('text')
+		.attr('transform', function(d){
+			// arc.centroid(d) 能算出弧线的中心
+			return 'translate(' + arc.centroid(d) + ')';
+		})
+		.text(function(d){
+
+			return d.data.name;
+		})
+
+	chart.append('text')
+		.attr('class', 'tips')
+
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+body{
+	margin: 0 auto;
+	text-align: center;
+}
+
+.chart{
+	border: 1px solid #eee;
+}
+
+
+.dots{
+	fill: none;
+}
+.dots:hover{
+	cursor: pointer;
+}
+.other{
+	color: #000;
+	fill: #000;
+}
+.Iris-setosa{
+	color: #ff7f0e;
+	fill: #ff7f0e;
+}
+.Iris-versicolor{
+	color: #2ca02c;
+	fill: #2ca02c;
+}
+.Iris-virginica{
+	color: #1f77b4;
+	fill: #1f77b4;
+}
+.Iris-setosa i{ background-color: #ff7f0e; }
+.Iris-versicolor i{ background-color: #2ca02c; }
+.Iris-virginica i{ background-color: #1f77b4; }
+
+
+
+/*坐标轴*/
+.axis text {
+	font: 10px sans-serif;
+}
+.axis path {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+.axis .x-axis-label{
+	text-anchor: middle;
+	font-size: 14px;
+}
+.axis .y-axis-label{
+	text-anchor: middle;
+	/*writing-mode: tb;*/
+	font-size: 14px;
+}
+
+.desc{
+	font-size: 12px;
+	/*text-align: right;*/
+}
+
+/*描述 图例 */
+.lengend{
+	padding: 0;
+	margin: 0;
+}
+.lengend li {
+	display: inline-block;
+	font-size: 12px;
+	padding: 0 20px;
+	margin-bottom: 20px;
+}
+.lengend li i{
+	padding: 0 6px;
+	margin-right: 4px;
+}

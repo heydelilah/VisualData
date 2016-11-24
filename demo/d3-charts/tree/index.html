@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>树形图</title>
+</head>
+<body>
+
+	<script src="../../../node_modules/d3/build/d3.js"></script>
+
+	<style>
+		body{
+			text-align: center;
+		}
+		.chart {
+			border: 1px solid #eee;
+			background-color: #fafafa;
+		}
+
+		path.line{
+			fill: none;
+			stroke: #474747;
+		}
+
+		g.node circle{
+			r: 5;
+			fill: #fafafa;
+			stroke: #78b446;
+			stroke-width: 4;
+		}
+
+	</style>
+
+	<h3>树形图</h3>
+	<svg class="chart"></svg>
+
+	<script>
+
+	var c = {
+		margin: {left: 30, right: 30, top: 30, bottom: 30},
+		width: 1000,
+		height: 600,
+
+		degree: 60
+	};
+
+	// 树形数据转换器
+	var tree = d3.layout.tree()
+		.size([c.degree, c.width/4]);
+
+	var svg = d3.select('.chart')
+		.attr({
+			width: c.width,
+			height: c.height
+		})
+		// 需要放入 g 中，做整体移动？
+		.append('g')
+		.attr('transform', 'translate('+ [50, c.height/2.3]+ ')rotate(60)');
+
+	d3.json('./data.json', function (data) {
+
+		var nodeData = tree.nodes(data);
+		var linkData = tree.links(nodeData);
+
+		console.log(data, 'data');
+		console.log(nodeData, 'nodeData');
+		console.log(linkData, 'linkData');
+
+		// 若从曲线更换为直线，怎么做？？
+		var diagonal = d3.svg.diagonal.radial()
+			.projection(function(d){
+				// 1. 为何要转为 角度？
+				// 2. 为何是 [d.y, d.x],而不是 [d.x, d.y]
+				return [d.y, d.x/180* Math.PI];
+			});
+
+		var lines = svg.selectAll('path.line')
+			.data(linkData)
+			.enter()
+			.append('path')
+			.attr({
+				'class': 'line',
+				d: diagonal
+			});
+
+		var nodes = svg.selectAll('g.node')
+			.data(nodeData)
+			.enter()
+			.append('g')
+			.attr({
+				'class': 'node',
+				transform: function(d){
+					// 逆时针旋转
+					return 'rotate('+(d.x-90)+')translate('+d.y+')';
+				}
+			});
+
+		nodes.append('circle');
+
+		nodes.append('text')
+			.attr({
+				dx: 30
+			})
+			.text(function(d){
+				return d.name;
+			});
+	})
+
+	</script>
+
+</body>
+</html>

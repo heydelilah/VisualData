@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>折线图</title>
+</head>
+<body>
+
+	<script src="../../../node_modules/d3/build/d3.js"></script>
+
+	<style>
+		body{
+			text-align: center;
+		}
+		.chart {
+			border: 1px solid #eee;
+			background-color: #fafafa;
+		}
+
+		.chart line,
+		.chart path{
+			fill: none;
+			stroke: #777;
+		}
+		.chart circle{
+			fill: #fafafa;
+			stroke-width: 4;
+			stroke: #78b446;
+		}
+		.chart .line{
+			stroke: #78b446;
+			stroke-width: 4;
+		}
+
+		.chart .area{
+			fill: #c3e4a8;
+		}
+
+	</style>
+
+	<h3>折线图</h3>
+	<svg class="chart"></svg>
+
+	<script>
+
+	var c = {
+		margin: {left: 100, right: 50, top: 50, bottom: 50},
+		width: 900,
+		height: 600,
+		radius: 5
+	};
+
+	var svg = d3.select('.chart')
+		.attr({
+			width: c.width,
+			height: c.height
+		})
+
+	var xScale = d3.scale.ordinal()
+		// 与 range() 的区别是什么？是否在序数中不能使用？
+		.rangePoints([0, c.width-c.margin.left -c.margin.right]);
+
+	var yScale = d3.scale.linear()
+		.range([c.height-c.margin.top-c.margin.bottom, 0]);
+
+	var xAxis = d3.svg.axis()
+		.scale(xScale)
+		.tickPadding(10)
+		.tickSize( - (c.height-c.margin.bottom-c.margin.top));
+
+	var yAxis = d3.svg.axis()
+		.scale(yScale)
+		.orient('left')
+		.tickPadding(10)
+		.tickSize( - (c.width-c.margin.left-c.margin.right));
+
+	d3.tsv('./data.tsv', type, function (data) {
+
+		console.log(JSON.stringify(data), 'data')
+
+		xScale.domain(data.map(function(d){
+			return d.year;
+		}));
+		yScale.domain([0, d3.max(data, function(d){return d.value; })]);
+
+		// 填充区域
+		var area = d3.svg.area()
+			.x( function(d){
+
+				console.log('('+xScale(d.year)+','+yScale(d.value)+')'); return xScale(d.year); } )
+			.y0( function(d){  return yScale(d.value); } )
+			.y1(c.height - c.margin.top - c.margin.bottom);
+
+
+		svg.append('path')
+			.data([data])
+			.attr({
+				'class': 'area',
+				d: area,
+				transform: 'translate('+[c.margin.left, c.margin.top]+')'
+			})
+
+		// 坐标轴与分割线
+		svg.append('g')
+			.attr({
+				transform: 'translate('+[c.margin.left, c.height-c.margin.bottom]+')'
+			})
+			.call(xAxis);
+
+		svg.append('g')
+			.attr({
+				transform: 'translate('+[c.margin.left, c.margin.top]+')'
+			})
+			.call(yAxis);
+
+		// 连线
+		var line = d3.svg.line()
+			.x( function(d){ return xScale(d.year); } )
+			.y( function(d){ return yScale(d.value); } );
+
+		svg.append('path')
+			// 为什么要放进一个 [] 里面？？
+			.data([data])
+			.attr({
+				'class': 'line',
+				d: function(d){ console.log(d); return line(d) } ,
+				transform: 'translate('+[c.margin.left, c.margin.top]+')'
+			});
+
+
+		// 描点
+		svg.selectAll('circle')
+			.data(data)
+			.enter()
+			.append('circle')
+			.attr({
+				cx: function(d){ return xScale(d.year); },
+				cy: function(d){ return yScale(d.value); },
+				r: c.radius,
+				transform: 'translate('+[c.margin.left, c.margin.top]+')'
+			});
+
+	});
+
+	function type(d){
+		d.year = +d.year;
+		d.value = +d.value;
+
+		return d;
+	}
+
+
+
+
+
+	</script>
+</body>
+</html>

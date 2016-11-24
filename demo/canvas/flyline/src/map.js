@@ -11,6 +11,7 @@ function Map(canvas, projection, c){
 
 				var topo = topojson.topology(data, data.objects['world']);
 
+				// @todo 地图画不出来，不知道是 topojson 版本问题，还是d3的版本问题。待排查
 				console.log(topo)
 
 				me.draw(topo);

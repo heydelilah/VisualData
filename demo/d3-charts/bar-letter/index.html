@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>英文字母使用频率</title>
+</head>
+<body>
+
+	<script src="../../../node_modules/d3/build/d3.js"></script>
+
+	<style>
+		body{
+			margin: 0 auto;
+			text-align: center;
+			background-color: #fafafa;
+		}
+		svg{
+			border: 1px solid #eee;
+		}
+		.chart rect:hover {
+			fill: #e377c2;
+		}
+
+		.axis text {
+			font: 10px sans-serif;
+		}
+
+		.axis path,
+		.axis line {
+			fill: none;
+			stroke: #000;
+			shape-rendering: crispEdges;
+		}
+	</style>
+
+	<h4>英文字母使用频率</h4>
+	<svg class="chart"></svg>
+
+	<script>
+
+	var margin = {
+			top: 20,
+			right: 30,
+			bottom: 30,
+			left: 40
+		},
+		W = 900,
+		H = 500
+		;
+
+	var x = d3.scale.ordinal()
+		// 调整间距
+    	.rangeRoundBands([0, W], .1);
+
+	var y = d3.scale.linear()
+		.range([H, 0]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient('bottom');
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient('left')
+		// 是指乘的倍率吗？为何是 10 而不是 100?
+		.ticks(10, "%");
+
+	var chart = d3.select('.chart')
+		.attr('width', W + margin.left + margin.right)
+		.attr('height', H + margin.top + margin.bottom)
+		.append("g")
+    	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+	d3.tsv('data.tsv', type, function(data){
+
+		y.domain([0, d3.max(data, function(d){ return d.value; })]);
+		x.domain(data.map(function(val){ return val.name }));
+
+		// 颜色线性渐变
+		var colorRange = d3.scale.linear()
+    		.domain([0, d3.max(data, function(d){ return d.value; })])
+    		.range(['#9edae5', '#1f77b4']);
+
+		chart.selectAll('rect')
+			.data(data)
+			.enter()
+			.append("rect")
+			.attr('x', function(value, index){
+				return x(value.name);
+			})
+			.attr('y', function(d){
+				return y(d.value)
+			})
+			.attr('fill', function(d){
+				return colorRange(d.value)
+			})
+			.attr('height', function(d){
+				return H - y(d.value)
+			})
+			.attr('width', x.rangeBand());
+
+		chart.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + (H) + ")")
+			.call(xAxis)
+		;
+
+		chart.append("g")
+			.attr("class", "y axis")
+			.call(yAxis)
+		;
+	})
+
+	function type(d) {
+		d.value = +d.value; // coerce to number
+		return d;
+	}
+
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>iris - 鸢尾属植物</title>
+
+	<link rel="stylesheet" href="style-Iris.css">
+</head>
+<body>
+
+	<script src="../../../node_modules/d3/build/d3.js"></script>
+
+	<h4>鸢尾属植物 - Iris</h4>
+	<ul class="lengend">
+		<li class="Iris-setosa"><i></i>山鸢尾 Iris Setosa</li>
+		<li class="Iris-versicolor"><i></i>变色鸢尾 Iris Versicolor</li>
+		<li class="Iris-virginica"><i></i>维吉尼亚鸢尾 Iris Virginica</li>
+	</ul>
+	<svg class="chart"></svg>
+	<p class="desc">注：点击鼠标新增描点</p>
+	<script>
+	// 间隙
+	var margin = { left: 50, right: 60, top: 50, bottom: 50 };
+
+	// 高宽
+	var c = {
+		width: 900,
+		height: 400
+	}
+
+	// 坐标
+	var xColumn = 'petal_length',
+		yColumn = 'petal_width',
+		specie = 'specie',
+		xLabel = '花瓣长度 (cm)',
+		yLabel = '花瓣宽度 (cm)',
+		offset = 30;
+
+	// 开始创建图表
+	var svg = d3.select('.chart')
+		.attr('width', c.width)
+		.attr('height', c.height);
+
+	// 准备
+	var x = d3.scale.linear().range([0, c.width-margin.left-margin.right]),
+		y = d3.scale.linear().range([c.height-margin.top-margin.bottom, 0]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient('bottom');
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient('left');
+
+	var data = [];
+
+	// 圆点属性设置
+	var circleInitAttrs = {
+		'cx': x(0),
+		'cy': y(0),
+		'transform': "translate(" + [ margin.left , margin.top ] + ")",
+		'r': 1
+	};
+	var circleAttrs = {
+		'cx': function(d){ return x(d[xColumn]); },
+		'cy': function(d){ return y(d[yColumn]); },
+		'class': function(d){ return 'dots ' + d[specie]; },
+		'r': 3,
+		'transform': "translate(" + [ margin.left , margin.top ] + ")"
+	};
+
+	// 鼠标移入事件
+	function mouseoverHandle(d, i){
+		svg.append('text')
+			.attr({
+				id: 't'+Math.round(d[xColumn])+Math.round(d[yColumn])+i,
+				class: 'tips',
+				x: x(d[xColumn])+margin.left,
+				y: y(d[yColumn])+margin.top + offset,
+			})
+			.text('( '+[ d[xColumn] +' , '+ d[yColumn] ]+' )');
+
+		// 动效
+		d3.select(this)
+			.transition()
+			.attr('r', 5);
+	}
+	// 鼠标移出事件
+	function mouseoutHandle(d, i){
+		d3.select('#t'+Math.round(d[xColumn])+Math.round(d[yColumn])+i)
+			.remove();
+
+		d3.select(this)
+			.transition()
+			.attr('r', 3);
+	}
+
+	// 坐标轴 － 标注
+	var xAxisG = svg.append('g')
+		.attr("class", "x axis")
+		.attr("transform", "translate(" + [ margin.left , c.height-margin.top ] + ")");
+
+	var yAxisG = svg.append('g')
+		.attr("class", "y axis")
+		.attr("transform", "translate(" + [ margin.left , margin.top ] + ")");
+
+	// 加载数据
+	d3.tsv('data-Iris.tsv', type, function(result){
+		data = result;
+
+		// 映射
+		x.domain( [0, d3.max(data, function(d){return d[xColumn]}) ] );
+		y.domain( [0, d3.max(data, function(d){return d[yColumn]}) ] );
+
+		// 创建散点
+		var circles = svg.selectAll('circle')
+			.data(data)
+			.enter()
+			.append('circle')
+			.attr(circleInitAttrs)
+			.on('mouseover', mouseoverHandle)
+			.on('mouseout', mouseoutHandle);
+
+		circles.transition()
+			.delay(function(d, i){
+				return i * 10;
+			})
+			.duration(100)
+			.attr(circleAttrs);
+
+		// 坐标轴 － 标注
+		xAxisG.call(xAxis);
+		yAxisG.call(yAxis);
+
+		// 坐标轴 － 名称
+		xAxisG.append('text')
+			.text(xLabel)
+			.attr("class", "x-axis-label")
+			.attr("transform", "translate(" +[ c.width-margin.left-margin.right , offset ]+ ")");
+
+		xAxisG.append('text')
+			.text(yLabel)
+			.attr("class", "y-axis-label")
+			.attr("transform", "translate("+[0, -(c.height-margin.top-offset)]+")");
+	});
+
+	// 点击新增描点
+	svg.on('click', function(d){
+		// 获取当前鼠标坐标
+		var coods = d3.mouse(this);
+
+		// 新增描点
+		var obj = { specie: 'other' };
+		obj[xColumn] = x.invert(coods[0]- margin.left).toFixed(2);
+		obj[yColumn] = y.invert(coods[1] - margin.top).toFixed(2);
+
+		data.push(obj);
+
+		console.log(obj)
+
+		// 更新坐标轴
+		x.domain( [0, d3.max(data, function(d){return d[xColumn]}) ] );
+		y.domain( [0, d3.max(data, function(d){return d[yColumn]}) ] );
+		xAxisG.call(xAxis);
+		yAxisG.call(yAxis);
+
+		// 更新
+		var circles = svg.selectAll('circle')
+			.data(data)
+			.attr(circleAttrs);
+
+		// 新增
+		circles.enter()
+			.append('circle')
+			.attr(circleInitAttrs)
+			.on('mouseover', mouseoverHandle)
+			.on('mouseout', mouseoutHandle);
+
+		circles.transition()
+			.ease('elastic')
+			.duration(600)
+			.attr(circleAttrs);
+	});
+
+	// 类型转换
+	function type(data){
+		data.sepal_length = +data.sepal_length;
+		data.sepal_width = +data.sepal_width;
+		data.petal_length = +data.petal_length;
+		data.petal_width = +data.petal_width;
+		return data;
+	}
+
+	</script>
+
+</body>
+</html>
