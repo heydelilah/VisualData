@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>animation-maker</title>
+</head>
+<body>
+	<script src="../../node_modules/d3/build/d3.js"></script>
+
+	<style>
+
+	path {
+		fill: none;
+		stroke: #000;
+		stroke-width: 1px;
+	}
+
+	circle {
+		fill: red;
+	}
+
+	</style>
+
+
+
+	<div id="pathAnimation">
+		<svg
+		   xmlns="http://www.w3.org/2000/svg"
+		   width="960"
+		   height="500"
+		   version="1.1"
+		   id="svg">
+		  <path
+		     d="m 480,200 c 100,0 0,250 100,200 100,-50 0,-250 100,-300 100,-50 350,100 100,200 -250,100 -350,100 -600,0 -250,-100 0,-250 100,-200 100,50 0,250 100,300 100,50 0,-200 100,-200"
+		     id="wiggle"
+		     class="weirdPath"/>
+		</svg>
+
+	</div>
+
+
+	<script>
+		var svg = d3.select('svg'),
+			path = svg.select('path#wiggle'),
+			marker = svg.append('circle');
+
+
+		var path_d = path.attr('d');
+		var start_point = path_d.split(' ')[1].split(',');
+
+		marker.attr({
+			'r': 7,
+			'transform': 'translate('+start_point+')'
+		});
+
+		running();
+
+		function running () {
+			marker.transition()
+				.duration(7500)
+				.attrTween('transform', valueTween(path.node()))
+				.each('end', running);
+		}
+
+		function valueTween(path){
+			var l = path.getTotalLength();
+
+			return function(d, i , value){
+
+				return function(t){
+
+					var p = path.getPointAtLength(t * l);
+
+					return 'translate('+[p.x, p.y]+')';
+				}
+			}
+		}
+
+
+
+
+
+
+
+	</script>
+</body>
+</html>

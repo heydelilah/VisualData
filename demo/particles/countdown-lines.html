@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>lines</title>
+</head>
+<style>
+	body {
+		background: #18212E;
+	}
+	svg{
+		position: absolute;
+		top: 50%;
+		/*left: 50%;*/
+		margin-top: -500px;
+		/*margin-left: -400px;*/
+	}
+	.line{
+		stroke: #000;
+		stroke-width: 4px;
+	}
+	.vert {
+		transform-origin: center bottom;
+	}
+
+	.hori {
+		transform-origin: 0% 50%;
+	}
+
+	.diag-left {
+		transform-origin: 100% 100%;
+	}
+
+	.diag-right {
+		transform-origin: 100% 0%;
+	}
+</style>
+<body>
+
+	<svg width="1000" height="800"></svg>
+	
+	<script src="../../node_modules/animejs/anime.js"></script>
+
+	<script>
+
+	var colors = [
+		'#FF324A', '#31FFA6', '#206EFF', '#FFFF99',
+		'#007EC2','#54ADDB','#91CAE4','#C1DAF1',
+		'#FC3F00','#FF8600','#FFAC57','#FFD09A',
+		'#00AD53','#3ECE74','#87E199','#B9EFBF',
+		'#7D5FB5','#A294CB','#BEB9DE','#DBD8EC'
+	];
+
+	var canvasW = 1000,
+		canvasH = 800,
+		l = 150,
+		h = 50,
+
+		marginTop = 50;
+
+	var $svg = document.querySelector('svg');
+	var doms = [];
+
+
+		function getHoriGroup (x, y, name) {
+			var result = [];
+
+			result[0] = [x,y,'hori'];
+			result[1] = [x+l, y, 'diag-right'];
+			result[2] = [x+l+(h/2), y+(h/2), 'diag-left'];
+			result[3] = [x+l, y+h, 'hori'];
+			result[4] = [x, y+h, 'diag-right'];
+			result[5] = [x-(h/2), y+(h/2), 'diag-left'];
+
+			createLine(result, name);
+		}
+
+		function getVertGroup(x, y, name){
+			var result = [];
+
+			result[0] = [x,y,'vert'];
+			result[1] = [x, y+l, 'diag-left'];
+			result[2] = [x-(h/2), y+l+(h/2), 'diag-right'];
+			result[3] = [x-h, y+l, 'vert'];
+			result[4] = [x-h, y, 'diag-left'];
+			result[5] = [x-h+(h/2), y-(h/2), 'diag-right'];
+
+			createLine(result, name);
+		}
+
+		var x = (canvasW/2)-(l/2);
+
+		getHoriGroup( x , marginTop, '5');
+		getHoriGroup( x , marginTop+l+h, '6');
+		getHoriGroup( x , marginTop+l+h+l+h, '7');
+
+		getVertGroup( x , marginTop+h, '1');
+		getVertGroup( x+l+h , marginTop+h, '3');
+		getVertGroup( x , marginTop+l+h+h, '2');
+		getVertGroup( x+l+h , marginTop+l+h+h, '4');
+
+		$svg.innerHTML = doms.join('');
+
+		function createLine(result, name){
+			var start, end, x1,x2,y1,y2;
+			for (var i = 0; i < result.length; i++) {
+				start = result[i];
+				end = (i === result.length-1) ? result[0] : result[i+1];
+
+				var elm = document.createElement('line');
+				x1 = start[0];
+				y1 = start[1];
+				x2 = end[0];
+				y2 = end[1];
+
+				doms.push( '<line data-id="'+name+'" class="line '+start[2]+'" x1='+start[0]+' y1='+y1+' x2='+x2+' y2='+y2+' />');
+			}
+
+		}
+
+		current = 8;
+
+		var number = {
+			0: [1,2,3,4,5,7],
+			1: [3,4],
+			2: [5, 3, 6, 2, 7],
+			3: [5,3,6,4,7],
+			4: [1,6,3,4],
+			5: [5,1,6,4,7],
+			6: [1,2,4,5,6,7],
+			7: [1,5,3,4],
+			8: [1,2,3,4,5,6,7,8],
+			9: [1,3,4,5,6,7]
+		};
+
+		function setAct(color){
+			var act = number[current];
+			boxes = document.querySelectorAll('line');
+			var item;
+			for (var i = 0; i < boxes.length; i++) {
+
+				item = boxes[i];
+				var index = Number(item.getAttribute('data-id'));
+
+				item.style.stroke = color;
+
+				if(act.indexOf(index) != -1){
+					// item.style.display = 'block';
+					item.style.opacity = 1;
+				}else{
+					// item.style.display = 'none';
+					item.style.opacity = 0;
+				}
+			}
+		}
+
+
+		var textpaths = anime({
+			targets: '.line',
+			translateX: function(target) {
+				var x = 1200;
+				if (target.classList.contains('hori')) return anime.random(0,1) === 1 ? x : -x;
+				if (target.classList.contains('diag-right')) return x / 3;
+				if (target.classList.contains('diag-left')) return -x / 3;
+			},
+			translateY: function(target) {
+				var y = 1200;
+				if (target.classList.contains('vert')) return anime.random(0,1) === 1 ? y : -y;
+				if (target.classList.contains('diag-right')) return y / 3;
+				if (target.classList.contains('diag-left')) return y / 3;
+			},
+			scale: {
+				value: 4,
+				duration: 500,
+			},
+			// stroke: '#fff',
+			// opacity: {
+			// 	value: [1, 0],
+			// 	duration: 100,
+			// },
+			delay: function(t, i) { return 0 + (i * 5) },
+			duration: 500,
+			easing: 'easeInOutQuad',
+			direction: 'reverse',
+			// speed: 1,
+			complete: function(){
+			  	current--;
+
+			  	if(current<0){
+			  		current =9;
+			  	}
+			  	setTimeout(function(){
+			  		setAct(colors[Math.floor(Math.random()*20)]);
+			  		textpaths.restart()
+			  	}, 1000);
+			  }
+		});
+
+
+
+	</script>
+
+</body>
+</html>

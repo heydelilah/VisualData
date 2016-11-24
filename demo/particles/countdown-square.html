@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>倒计时</title>
+</head>
+<body>
+
+	<script src="../../node_modules/jquery/dist/jquery.js"></script>
+	<script src="../../node_modules/animejs/anime.js"></script>
+
+
+	<section>
+		<div data-id="1"></div>
+		<div data-id="1"></div>
+		<div data-id="8"></div>
+		<div data-id="8"></div>
+
+		<div data-id="11"></div>
+		<div data-id="11"></div>
+		<div data-id="14"></div>
+		<div data-id="14"></div>
+
+		<div data-id="1"></div>
+		<div data-id="1"></div>
+		<div data-id="8"></div>
+		<div data-id="8"></div>
+
+		<div data-id="11"></div>
+		<div data-id="11"></div>
+		<div data-id="14"></div>
+		<div data-id="14"></div>
+
+
+		<div data-id="2"></div>
+		<div data-id="2"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="15"></div>
+		<div data-id="15"></div>
+
+
+		<div data-id="2"></div>
+		<div data-id="2"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="15"></div>
+		<div data-id="15"></div>
+
+		<div data-id="3"></div>
+		<div data-id="3"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="16"></div>
+		<div data-id="16"></div>
+
+		<div data-id="3"></div>
+		<div data-id="3"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="16"></div>
+		<div data-id="16"></div>
+
+		<div data-id="4"></div>
+		<div data-id="4"></div>
+		<div data-id="9"></div>
+		<div data-id="9"></div>
+		<div data-id="12"></div>
+		<div data-id="12"></div>
+		<div data-id="17"></div>
+		<div data-id="17"></div>
+
+		<div data-id="4"></div>
+		<div data-id="4"></div>
+		<div data-id="9"></div>
+		<div data-id="9"></div>
+		<div data-id="12"></div>
+		<div data-id="12"></div>
+		<div data-id="17"></div>
+		<div data-id="17"></div>
+
+		<div data-id="5"></div>
+		<div data-id="5"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="18"></div>
+		<div data-id="18"></div>
+
+		<div data-id="5"></div>
+		<div data-id="5"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="18"></div>
+		<div data-id="18"></div>
+
+		<div data-id="6"></div>
+		<div data-id="6"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="19"></div>
+		<div data-id="19"></div>
+
+		<div data-id="6"></div>
+		<div data-id="6"></div>
+			<i></i>  <i></i>  <i></i>  <i></i>
+		<div data-id="19"></div>
+		<div data-id="19"></div>
+
+
+		<div data-id="7"></div>
+		<div data-id="7"></div>
+		<div data-id="10"></div>
+		<div data-id="10"></div>
+		<div data-id="13"></div>
+		<div data-id="13"></div>
+		<div data-id="20"></div>
+		<div data-id="20"></div>
+		<div data-id="7"></div>
+		<div data-id="7"></div>
+		<div data-id="10"></div>
+		<div data-id="10"></div>
+		<div data-id="13"></div>
+		<div data-id="13"></div>
+		<div data-id="20"></div>
+		<div data-id="20"></div>
+
+	</section>
+
+
+	<style>
+		body{
+			margin: 0;
+		}
+
+
+		body {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: #18212E;
+		}
+
+
+		section {
+			display: flex;
+			flex-wrap: wrap;
+			width: 24rem;
+			height: 42rem;
+
+		}
+
+		div,i {
+			width: 3rem;
+			height: 3rem;
+			background: transparent;
+		}
+
+	</style>
+
+	<script>
+
+	// var colors = ['#FF324A', '#31FFA6', '#206EFF', '#FFFF99'];
+	var colors = [
+		'#FF324A', '#31FFA6', '#206EFF', '#FFFF99',
+		'#007EC2','#54ADDB','#91CAE4','#C1DAF1',
+		'#FC3F00','#FF8600','#FFAC57','#FFD09A',
+		'#00AD53','#3ECE74','#87E199','#B9EFBF',
+		'#7D5FB5','#A294CB','#BEB9DE','#DBD8EC'
+	];
+
+	// 任何一个数字由七段组成
+	var part = {
+		1: [1,2,3,4],
+		2: [4,5,6,7],
+		3: [14,15,16,17],
+		4: [17,18,19,20],
+		5: [1,8,11,14],
+		6: [4,9,12,17],
+		7: [7,10,13,20]
+	};
+
+	var number = {
+		0: [1,2,3,4,5,7],
+		1: [3,4],
+		2: [5, 3, 6, 2, 7],
+		3: [5,3,6,4,7],
+		4: [1,6,3,4],
+		5: [5,1,6,4,7],
+		6: [1,2,4,5,6,7],
+		7: [1,5,3,4],
+		8: [1,2,3,4,5,6,7,8],
+		9: [1,3,4,5,6,7]
+	};
+
+	var shape = {};
+	for( n in number){
+		shape[n] = [];
+		var child = number[n];
+
+		for (var i = 0; i < child.length; i++) {
+			shape[n] = shape[n].concat(part[child[i]]);
+		}
+	}
+
+	var current = 9;
+
+	// 初始化
+	var boxes;
+	function init (argument) {
+		boxes = $('div');
+		var item;
+		for (var i = 0; i < boxes.length; i++) {
+			item = boxes[i];
+			boxes[i].style.background = colors[Math.floor(Math.random()*20)];
+		}
+
+		setAct();
+
+	}
+
+	function setAct(){
+		var act = shape[current];
+
+		boxes = $('div');
+		var item;
+		for (var i = 0; i < boxes.length; i++) {
+
+			item = boxes[i];
+			var index = Number($(item).attr('data-id'));
+			if(act.indexOf(index) != -1){
+				item.style.opacity = 1;
+			}else{
+				item.style.opacity = 0;
+			}
+		}
+	}
+
+
+	init();
+
+
+	var move = anime({
+	  targets: 'div',
+	  translateX: function() { return anime.random(-15, 15) + 'rem'; },
+	  translateY: function() { return anime.random(-8, 8) + 'rem'; },
+	  scale: function() { return anime.random(10, 20) / 10; },
+	  rotate: function() { return anime.random(-360, 360); },
+	  // delay: function() { return 400 + anime.random(0, 500); },
+	  duration: function() { return anime.random(1000, 2000); },
+	  direction: 'alternate',
+	  easing: 'easeOutElastic',
+	  // loop: true,
+	  // autoplay: false,
+	  duration: 800,
+	  complete: function(){
+	  	current--;
+
+	  	if(current<0){
+	  		current =9;
+	  	}
+	  	setAct();
+	  	setTimeout(function(){
+	  		move.restart()
+	  	}, 0);
+	  }
+	});
+
+
+
+
+
+
+
+
+
+	</script>
+
+
+</body>
+</html>

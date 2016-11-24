@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas 飞线</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+
+<body id='main'>
+
+	<style>
+	body{
+		background-color: #130027;
+	}
+
+	canvas{
+		border: 1px solid #fff;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+	</style>
+
+	<script src="../../../libs/stats.js"></script>
+
+
+	<canvas id="theRays"></canvas>
+
+	<script src="rays.js"></script>
+	<script>
+		var c = {
+			// 画布大小
+			width: 1600,
+			height: 800,
+
+			// 帧增量间隔,数值越大，速度越快
+			speed: 20
+
+		};
+
+		var rays = new Rays(c, 'theRays');
+		rays.run();
+		rays.animate();
+	</script>
+
+	<script>
+		var stats = new Stats();
+		stats.showPanel( 0 );
+
+		document.body.appendChild( stats.dom );
+
+		function animateStats() {
+
+		stats.begin();
+
+		// monitored code goes here
+
+		stats.end();
+
+		requestAnimationFrame( animateStats );
+
+		}
+
+		requestAnimationFrame( animateStats );
+	</script>
+
+</body>
+</html>
