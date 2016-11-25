@@ -1,13 +1,26 @@
-# VisualData 数据可视化
+Data Visualization 数据可视化
+===================================
 
-Data visualization
+主要涉及：`SVG`, `Canvas`, `D3.js`, `Three.js`
 
-svg
-canvas
-three.js
+## Canvas
 
-Square demos
+- canvas 地图飞线    ——————    20160512
+- 眨眼数字翻动效果    ——————    20161123
 
-1. Colorfull squares 在画布区域，点击鼠标生成颜色随机的方块；
-2. Draggable squares 随机生成大小不一的方块，可拖动方块到任意位置；
-3. Bezier 模拟三次贝塞尔曲线
+
+## Particles 粒子效果
+
+- Canvas 粒子倒计时    ——————    2016年5月
+- SVG 射线倒计时    ——————    2016年5月
+- SVG 方块倒计时    ——————    2016年5月
+
+
+## SVG charts
+###### 基于 D3 的一些基本图表
+
+- 散点图 - Iris 鸢尾属植物    ——————    2016年4月
+- 柱状图 - 英文字母使用频率    ——————    2016年4月
+- 折线图    ——————    2016年4月
+- 饼图    ——————    2016年4月
+- 树形图    ——————    2016年4月

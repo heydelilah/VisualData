@@ -17,12 +17,12 @@
   },
   "homepage": "https://github.com/heydelilah/VisualData",
   "devDependencies": {
-    "anime": "^0.1.2",
-    "animejs": "^1.1.1",
-    "d3": "^4.4.0",
-    "jquery": "^3.1.1",
-    "moment": "^2.17.0",
-    "stats": "^1.0.0",
-    "topojson": "^2.0.0"
+    "anime": "0.1.2",
+    "animejs": "1.1.1",
+    "d3": "4.4.0",
+    "jquery": "3.1.1",
+    "moment": "2.17.0",
+    "stats": "1.0.0",
+    "topojson": "2.0.0"
   }
 }

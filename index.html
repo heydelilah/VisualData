@@ -6,33 +6,111 @@
 </head>
 
 <style>
+body{
+	background: #FAFAFA;
+}
 
-ul{list-style: none;}
-a{text-decoration: none;}
+ul{
+	list-style: none; 
+	margin: 0.5em 0 0 0;
+}
+ul li{
+	margin-bottom: 0.3em;
+}
+a{
+	text-decoration: none;
+}
+.title{
+	margin: 2em 0 0 0;
+}
 .time{
 	display: inline-block;
 	margin-left: 1em;
+}
+.desc{
+	color: #333;
+	font-size: 0.8em;
+}
+.sub-title{
+	min-width: 300px;
+	display: inline-block;
 }
 	
 </style>
 <body>
 	<h1>目录</h1>
 
-	<h3>Canvas</h3>
+	<h3 class="title">Canvas</h3>
 	<ul>
 		<li>
-			<a href="./demo/canvas/flyline/index.html" target="_blank">
+			<a class="sub-title" href="./demo/canvas/flyline/index.html" target="_blank">
 				canvas 地图飞线
 			</a>
 			<span class="time">20160512</span>
 		</li>
 		<li>
-			<a href="./demo/canvas/flipper/index.html" target="_blank">
+			<a class="sub-title" href="./demo/canvas/flipper/index.html" target="_blank">
 				眨眼数字翻动效果
 			</a>
 			<span class="time">20161123</span>
 		</li>
-		<li></li>
+	</ul>
+
+	<h3 class="title">Particles 粒子效果</h3>
+	<ul>
+		<li>
+			<a class="sub-title" href="./demo/particles/canvas-circles.html" target="_blank">
+				Canvas 粒子倒计时
+			</a>
+			<span class="time">2016年5月</span>
+		</li>
+		<li>
+			<a class="sub-title" href="./demo/particles/countdown-lines.html" target="_blank">
+				SVG 射线倒计时
+			</a>
+			<span class="time">2016年5月</span>
+		</li>
+		<li>
+			<a class="sub-title" href="./demo/particles/canvas-circles.html" target="_blank">
+				SVG 方块倒计时
+			</a>
+			<span class="time">2016年5月</span>
+		</li>
+	</ul>
+
+	<h3 class="title">SVG charts</h3>
+	<div class="desc">基于 D3 的一些基本图表</div>
+	<ul>
+		<li>
+			<a class="sub-title" href="./demo/svg-charts/scatterplot-Iris/index.html" target="_blank">
+				散点图 - Iris 鸢尾属植物
+			</a>
+			<span class="time">2016年4月</span>
+		</li>
+		<li>
+			<a class="sub-title" href="./demo/svg-charts/bar-letter/index.html" target="_blank">
+				柱状图 - 英文字母使用频率
+			</a>
+			<span class="time">2016年4月</span>
+		</li>
+		<li>
+			<a class="sub-title" href="./demo/svg-charts/line/index.html" target="_blank">
+				折线图
+			</a>
+			<span class="time">2016年4月</span>
+		</li>
+		<li>
+			<a class="sub-title" href="./demo/svg-charts/pie/index.html" target="_blank">
+				饼图
+			</a>
+			<span class="time">2016年4月</span>
+		</li>
+		<li>
+			<a class="sub-title" href="./demo/svg-charts/tree/index.html" target="_blank">
+				树形图
+			</a>
+			<span class="time">2016年4月</span>
+		</li>
 	</ul>
 
 
